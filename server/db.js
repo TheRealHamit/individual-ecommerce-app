@@ -46,11 +46,81 @@ async function createUser({ username, password }) {
     return response.rows[0];
 }
 
+async function fetchUsers() {
+    const SQL = `
+    SELECT id, username
+    FROM user_account;
+    `;
+    const response = await client.query(SQL);
+    return response.rows;
+}
+
+async function authenticate({ username, password }) {
+    const SQL = `
+    SELECT id, password
+    FROM user_account
+    WHERE username = $1;
+    `;
+
+    const response = await client.query(SQL, [ username ]);
+    if (!response.rows.length || (await bcrypt.compare(password, response.rows[0].password)) === false) {
+        const error = Error('Not authorized');
+        error.status = 401;
+        throw error;
+    }
+    const token = await jwt.sign({ id: response.rows[0].id }, JWT );
+    return { token };
+}
+
+async function findUserByToken(token) {
+    let id;
+    try {
+        const payload = await jwt.verify(token, JWT);
+        id = payload.id;
+    } catch (ex) {
+        const error = Error('Not authorized');
+        error.status = 401;
+        throw error;
+    }
+    const SQL = `
+    SELECT id, username
+    FROM user_account
+    WHERE id = $1;
+    `;
+    const response = await client.query(SQL, [ id ]);
+    if (!response.rows.length) {
+        const error = Error('Not authorized');
+        error.status = 401;
+        throw error;
+    }
+    return response.rows[0];
+}
+
 async function createCategory({ name }) {
     const SQL = `
         INSERT INTO category(id, name) VALUES($1, $2) RETURNING *;
     `;
     const response = await client.query(SQL, [uuid.v4(), name]);
+    return response.rows[0];
+}
+
+async function fetchCategoryByName(name) {
+    const SQL = `
+        SELECT *
+        FROM category
+        WHERE name = $1;
+    `;
+    const response = await client.query(SQL, [name]);
+    return response.rows[0];
+}
+
+async function fetchCategoryByID(category_id) {
+    const SQL = `
+        SELECT *
+        FROM category
+        WHERE id = $1;
+    `;
+    const response = await client.query(SQL, [category_id]);
     return response.rows[0];
 }
 
@@ -62,6 +132,14 @@ async function createProduct({ name, category_id, price }) {
     return response.rows[0];
 }
 
+async function fetchProducts() {
+    const SQL = `
+        SELECT * FROM product;
+    `;
+    const response = await client.query(SQL);
+    return response.rows;
+}
+
 async function createUserProduct({ user_id, product_id, count }) {
     const SQL = `
         INSERT INTO user_product(id, user_id, product_id, count) VALUES($1, $2, $3, $4) RETURNING *;
@@ -71,5 +149,7 @@ async function createUserProduct({ user_id, product_id, count }) {
 }
 module.exports = {
     client,
-    createTables, createUser, createCategory, createProduct, createUserProduct
+    createTables, createUser, createCategory, createProduct, createUserProduct,
+    fetchUsers, fetchProducts, fetchCategoryByName, fetchCategoryByID,
+    authenticate, findUserByToken
 }
