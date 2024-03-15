@@ -6,8 +6,43 @@ const {
 } = require('./db');
 const express = require('express');
 const app = express();
-
 app.use(express.json());
+
+async function isLoggedIn(req, res, next) {
+    try {
+        req.user = await findUserByToken(req.headers.authorization);
+        next();
+    } catch (e) {
+        next(e);
+    }
+};
+
+app.post('/api/auth/login', async(req, res, next) => {
+    try {
+        res.send(await authenticate(req.body));
+    }
+    catch (e) {
+        next(e);
+    }
+});
+
+app.get('/api/auth/me', isLoggedIn, async(req, res, next) => {
+    try {
+        res.send(req.user);
+    }
+    catch (e) {
+        next(e);
+    }
+});
+
+app.get('/api/users', async(req, res, next) => {
+    try {
+        res.send(await fetchUsers());
+    }
+    catch (e) {
+        next(e);
+    }
+});
 
 const init = async() => {
     await client.connect();
