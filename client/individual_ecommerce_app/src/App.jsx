@@ -3,8 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import './App.css';
 import Home from './components/Home.jsx';
-import Login from './components/Login.jsx';
-import Register from './components/Register.jsx';
+import LoginRegister from './components/LoginRegister.jsx';
 import Products from './components/Products.jsx';
 import { attemptLoginWithToken } from './API.js';
 import Logout from './components/Logout.jsx';
@@ -25,8 +24,7 @@ function App() {
       <Navbar auth={auth} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login setAuth={setAuth} />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<LoginRegister auth={auth} setAuth={setAuth} />} />
           <Route path="/products" element={<Products />} />
         </Routes>
         {auth.id ? <Logout setAuth={setAuth} /> : null}

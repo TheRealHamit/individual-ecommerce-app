@@ -1,18 +1,26 @@
 import { useState } from "react";
-import { login, attemptLoginWithToken } from "../API";
+import { login } from "../API";
+import { Navigate } from "react-router-dom";
+import { register } from "../API";
 
-export default function Login({ setAuth }) {
+export default function LoginRegister({ auth, setAuth }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     async function submit(e) {
         e.preventDefault();
-        console.log(username, password)
-        login({username, password}, setAuth)
+        const submitter = e.nativeEvent.submitter.value;
+        const credentials = {username, password};
+        if (submitter == "login") {
+            login(credentials, setAuth);
+        } else {
+            register(credentials, setAuth);
+        }
     }
     return (
         <div>
-            <h1>Login</h1>
+        {auth.id && <Navigate to="/" />}
+            <h1>Login/Register</h1>
             <form onSubmit={submit}>
                 <label>
                     Username: <input
@@ -28,7 +36,8 @@ export default function Login({ setAuth }) {
                                 onChange={e => setPassword(e.target.value)}
                                 placeholder='password' />
                 </label>
-                <button type="submit">Login</button>
+                <button value="login" type="submit">Login</button>
+                <button value="register" type="submit">Register</button>
             </form>
         </div>
     )

@@ -1,3 +1,25 @@
+
+export async function register(credentials, setAuth) {
+    try {
+        const response = await fetch('api/auth/register',
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+        });
+        const result = await response.json();
+        if (response.ok) {
+            window.localStorage.setItem('token', result.token);
+            attemptLoginWithToken(setAuth);
+        }
+        console.log(result);
+    } catch (error) {
+         console.error(error)
+    }
+}
+
 export async function login(credentials, setAuth) {
     try {
         const response = await fetch('api/auth/login',
@@ -8,13 +30,13 @@ export async function login(credentials, setAuth) {
             },
             body: JSON.stringify(credentials),
         })
-        const result = await response.json()
+        const result = await response.json();
         if (response.ok) {
             window.localStorage.setItem('token', result.token);
             attemptLoginWithToken(setAuth);
         }
     } catch (error) {
-         console.error(error)
+         console.error(error);
     }
 }
 

@@ -17,6 +17,17 @@ async function isLoggedIn(req, res, next) {
     }
 };
 
+app.post('/api/auth/register', async(req, res, next) => {
+    try {
+        const user = req.body;
+        await createUser(user);
+        res.send(await authenticate(user));
+    }
+    catch (e) {
+        next(e);
+    }
+});
+
 app.post('/api/auth/login', async(req, res, next) => {
     try {
         res.send(await authenticate(req.body));
