@@ -21,13 +21,13 @@ function App() {
   return (
     <>
       <div id="main-section">
-      <Navbar auth={auth} />
+      <Navbar auth={auth} setAuth={setAuth} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginRegister auth={auth} setAuth={setAuth} />} />
           <Route path="/products" element={<Products />} />
         </Routes>
-        {auth.id ? <Logout setAuth={setAuth} /> : null}
+        {/* {auth.id ? <Logout setAuth={setAuth} /> : null} */}
       </div>
     </>
   )

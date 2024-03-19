@@ -64,7 +64,7 @@ app.get('/api/products', async(req, res, next) => {
     }
 });
 
-const init = async() => {
+async function init() {
     await client.connect();
     await createTables();
 
@@ -74,17 +74,27 @@ const init = async() => {
         createUser({ username: 'mary', password: 'mary123' })
     ]);
 
-    const [electronics, food, toy] = await Promise.all([
+    const categories = await Promise.all([
         createCategory({ name: 'electronics' }),
         createCategory({ name: 'food' }),
-        createCategory({ name: 'toy' })
-    ])
+        createCategory({ name: 'toy' }),
+        createCategory({ name: 'furniture' }),
+        createCategory({ name: 'decoration' }),
+    ]);
 
     const [iphone, cheese, lego] = await Promise.all([
-        createProduct({ name: 'iphone', price: 1000, category_id: electronics.id }),
-        createProduct({ name: 'cheese', price: 5 , category_id: food.id }),
-        createProduct({ name: 'lego', price: 30 , category_id: toy.id })
-    ])
+        createProduct({ name: 'iphone', price: 1000, category_id: categories[0].id }),
+        createProduct({ name: 'cheese', price: 5 , category_id: categories[1].id }),
+        createProduct({ name: 'lego', price: 30 , category_id: categories[2].id })
+    ]);
+
+    for (let i = 0; i < 100; i++) {
+        const product = { name: 'product' + i,
+                        price: Math.floor(Math.random() * 1000),
+                        category_id: categories[Math.floor(Math.random() * 5)].id
+                    };
+        createProduct(product);
+    }
     // const users = await fetchUsers();
     // console.log(users);
     // const category1 = await fetchCategoryByName("electronics");
