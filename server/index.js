@@ -1,7 +1,7 @@
 const {
     client,
     createTables, createUser, createCategory, createProduct, createUserProduct,
-    fetchUsers, fetchProducts, fetchCategoryByName, fetchCategoryByID,
+    fetchUsers, fetchProducts, fetchUserProducts, fetchCategoryByName, fetchCategoryByID,
     authenticate, findUserByToken
 } = require('./db');
 const express = require('express');
@@ -55,6 +55,28 @@ app.get('/api/users', async(req, res, next) => {
     }
 });
 
+app.put('/api/users/:id/cart', isLoggedIn, async(req, res, next) => {
+    try {
+        const user_product = await {
+                            user_id: req.user.id,
+                            product_id: req.body.product_id,
+                            count: req.body.count }
+        res.send(await createUserProduct(user_product));
+    }
+    catch (e) {
+        next(e);
+    }
+});
+
+app.get('/api/users/:id/cart', isLoggedIn, async(req, res, next) => {
+    try {
+        res.send(await fetchUserProducts(req.user.id));
+    }
+    catch (e) {
+        next(e);
+    }
+});
+
 app.get('/api/products', async(req, res, next) => {
     try {
         res.send(await fetchProducts());
@@ -95,6 +117,13 @@ async function init() {
                     };
         createProduct(product);
     }
+
+    // const [test] = await Promise.all([
+    //     createUserProduct({user_id: bob.id, product_id: iphone.id, count: 1})
+    // ]);
+    // console.log(test);
+    // console.log(bob);
+    // console.log(await fetchUserProducts(bob.id));
     // const users = await fetchUsers();
     // console.log(users);
     // const category1 = await fetchCategoryByName("electronics");

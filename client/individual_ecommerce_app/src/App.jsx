@@ -7,6 +7,7 @@ import LoginRegister from './components/LoginRegister.jsx';
 import Products from './components/Products.jsx';
 import { attemptLoginWithToken } from './API.js';
 import Logout from './components/Logout.jsx';
+import Cart from './components/Cart.jsx';
 
 function App() {
   const [auth, setAuth] = useState({});
@@ -24,8 +25,9 @@ function App() {
       <Navbar auth={auth} setAuth={setAuth} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginRegister auth={auth} setAuth={setAuth} />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/login" element={<LoginRegister auth={auth} setAuth={setAuth} />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
         {/* {auth.id ? <Logout setAuth={setAuth} /> : null} */}
       </div>

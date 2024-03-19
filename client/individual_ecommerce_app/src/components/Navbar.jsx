@@ -6,6 +6,7 @@ export default function Navbar({ auth, setAuth }) {
         <nav>
             <Link to="/">Home</Link>
             <Link to="/products">Products</Link>
+            <Link to="/cart">Cart</Link>
             {auth.id ? <Logout setAuth={setAuth} /> : <Link to="/login">Login/Register</Link>}
         </nav>
     )

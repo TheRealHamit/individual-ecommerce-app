@@ -40,7 +40,9 @@ const createTables = async() => {
 
 async function createUser({ username, password }) {
     const SQL = `
-        INSERT INTO user_account(id, username, password) VALUES($1, $2, $3) RETURNING *;
+        INSERT INTO user_account(id, username, password)
+        VALUES($1, $2, $3)
+        RETURNING *;
     `;
     const response = await client.query(SQL, [uuid.v4(), username, await bcrypt.hash(password,5)]);
     return response.rows[0];
@@ -48,19 +50,19 @@ async function createUser({ username, password }) {
 
 async function fetchUsers() {
     const SQL = `
-    SELECT id, username
-    FROM user_account;
-    `;
+        SELECT id, username
+        FROM user_account;
+        `;
     const response = await client.query(SQL);
     return response.rows;
 }
 
 async function authenticate({ username, password }) {
     const SQL = `
-    SELECT id, password
-    FROM user_account
-    WHERE username = $1;
-    `;
+        SELECT id, password
+        FROM user_account
+        WHERE username = $1;
+        `;
 
     const response = await client.query(SQL, [ username ]);
     if (!response.rows.length || (await bcrypt.compare(password, response.rows[0].password)) === false) {
@@ -83,10 +85,10 @@ async function findUserByToken(token) {
         throw error;
     }
     const SQL = `
-    SELECT id, username
-    FROM user_account
-    WHERE id = $1;
-    `;
+        SELECT id, username
+        FROM user_account
+        WHERE id = $1;
+        `;
     const response = await client.query(SQL, [ id ]);
     if (!response.rows.length) {
         const error = Error('Not authorized');
@@ -126,7 +128,9 @@ async function fetchCategoryByID(category_id) {
 
 async function createProduct({ name, price, category_name }) {
     const SQL = `
-        INSERT INTO product(id, name, price, category_name) VALUES($1, $2, $3, $4) RETURNING *;
+        INSERT INTO product(id, name, price, category_name)
+        VALUES($1, $2, $3, $4)
+        RETURNING *;
     `;
     const response = await client.query(SQL, [uuid.v4(), name, price, category_name]);
     return response.rows[0];
@@ -142,14 +146,30 @@ async function fetchProducts() {
 
 async function createUserProduct({ user_id, product_id, count }) {
     const SQL = `
-        INSERT INTO user_product(id, user_id, product_id, count) VALUES($1, $2, $3, $4) RETURNING *;
+        INSERT INTO user_product(id, user_id, product_id, count)
+        VALUES($1, $2, $3, $4)
+        ON CONFLICT ON CONSTRAINT unique_user_id_product_id
+        DO UPDATE SET
+            count = EXCLUDED.count
+        RETURNING *;
     `;
     const response = await client.query(SQL, [uuid.v4(), user_id, product_id, count]);
     return response.rows[0];
 }
+
+async function fetchUserProducts(user_id) {
+    const SQL = `
+        SELECT *
+        FROM user_product
+        WHERE user_id=$1;
+    `
+    const response = await client.query(SQL, [user_id]);
+    return response.rows;
+}
+
 module.exports = {
     client,
     createTables, createUser, createCategory, createProduct, createUserProduct,
-    fetchUsers, fetchProducts, fetchCategoryByName, fetchCategoryByID,
+    fetchUsers, fetchProducts, fetchUserProducts, fetchCategoryByName, fetchCategoryByID,
     authenticate, findUserByToken
 }

@@ -76,3 +76,41 @@ export async function getProducts() {
          console.error(error)
     }
 }
+
+export async function addToCart(product_id, count) {
+    const token = window.localStorage.getItem('token');
+    try {
+        const response = await fetch('api/users/1/cart',
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: token
+            },
+            body: JSON.stringify({ product_id: product_id, count: count }),
+        })
+        const result = await response.json()
+        console.log(result)
+    } catch (error) {
+         console.error(error)
+    }
+}
+
+export async function getCart() {
+    const token = window.localStorage.getItem('token');
+    try {
+        const response = await fetch('api/users/1/cart',
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: token
+            }
+        })
+        const result = await response.json()
+        console.log(result)
+        return result;
+    } catch (error) {
+         console.error(error)
+    }
+}
