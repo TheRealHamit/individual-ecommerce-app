@@ -25,7 +25,7 @@ const createTables = async() => {
         id UUID PRIMARY KEY,
         name varchar(255) NOT NULL UNIQUE,
         price INT NOT NULL,
-        category_id UUID REFERENCES category(id) NOT NULL
+        category_name varchar(255) REFERENCES category(name) NOT NULL
     );
     CREATE TABLE user_product(
         id UUID PRIMARY KEY,
@@ -124,11 +124,11 @@ async function fetchCategoryByID(category_id) {
     return response.rows[0];
 }
 
-async function createProduct({ name, category_id, price }) {
+async function createProduct({ name, price, category_name }) {
     const SQL = `
-        INSERT INTO product(id, name, price, category_id) VALUES($1, $2, $3, $4) RETURNING *;
+        INSERT INTO product(id, name, price, category_name) VALUES($1, $2, $3, $4) RETURNING *;
     `;
-    const response = await client.query(SQL, [uuid.v4(), name, price, category_id]);
+    const response = await client.query(SQL, [uuid.v4(), name, price, category_name]);
     return response.rows[0];
 }
 

@@ -83,15 +83,15 @@ async function init() {
     ]);
 
     const [iphone, cheese, lego] = await Promise.all([
-        createProduct({ name: 'iphone', price: 1000, category_id: categories[0].id }),
-        createProduct({ name: 'cheese', price: 5 , category_id: categories[1].id }),
-        createProduct({ name: 'lego', price: 30 , category_id: categories[2].id })
+        createProduct({ name: 'iphone', price: 1000, category_name: categories[0].name }),
+        createProduct({ name: 'cheese', price: 5 , category_name: categories[1].name }),
+        createProduct({ name: 'lego', price: 30 , category_name: categories[2].name })
     ]);
 
     for (let i = 0; i < 100; i++) {
         const product = { name: 'product' + i,
                         price: Math.floor(Math.random() * 1000),
-                        category_id: categories[Math.floor(Math.random() * 5)].id
+                        category_name: categories[Math.floor(Math.random() * 5)].name
                     };
         createProduct(product);
     }
