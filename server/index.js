@@ -55,6 +55,15 @@ app.get('/api/users', async(req, res, next) => {
     }
 });
 
+app.get('/api/products', async(req, res, next) => {
+    try {
+        res.send(await fetchProducts());
+    }
+    catch (e) {
+        next(e);
+    }
+});
+
 const init = async() => {
     await client.connect();
     await createTables();

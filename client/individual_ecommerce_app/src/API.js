@@ -62,3 +62,19 @@ export async function attemptLoginWithToken(setAuth) {
          console.error(error)
     }
 }
+
+export async function getProducts() {
+    try {
+        const response = await fetch('api/products',
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        const result = await response.json()
+        return result;
+    } catch (error) {
+         console.error(error)
+    }
+}
