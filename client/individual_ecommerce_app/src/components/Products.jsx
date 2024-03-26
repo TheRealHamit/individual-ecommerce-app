@@ -1,21 +1,27 @@
 import { useEffect, useState } from "react"
 import { getProducts } from "../API";
 import Item from "./Item";
+import { Container, Grid, Typography } from "@mui/material";
 
 export default function Products() {
     const [products, setProducts] = useState();
 
     useEffect(() => {
         async function fetchProducts() {
-            const p = await getProducts();
+            const res = await getProducts();
+            const p = res.map(i => ({...i, buyable: true}));
             await setProducts(p);
         }
         fetchProducts();
     }, [])
     return (
-        <div>
-            <h1>Products</h1>
-            <div>{products ? products.map((p, i) => {return <Item key={'Item' + i} itemInfo={p} />}) : null}</div>
-        </div>
+        <Container>
+            <Typography variant="h1">
+                Products
+            </Typography>
+            {products ? <Grid container spacing={5}>{
+            products.map((p, i) => {return <Item key={'Item' + i} itemInfo={p} />})
+            }</Grid> : null}
+        </Container>
     )
 }

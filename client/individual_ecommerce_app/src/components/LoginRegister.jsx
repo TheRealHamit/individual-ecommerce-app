@@ -3,6 +3,9 @@ import { login } from "../API";
 import { Navigate } from "react-router-dom";
 import { register } from "../API";
 
+import Button from '@mui/material/Button';
+import { Container, TextField, Typography } from "@mui/material";
+
 export default function LoginRegister({ auth, setAuth }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -18,27 +21,15 @@ export default function LoginRegister({ auth, setAuth }) {
         }
     }
     return (
-        <div>
-        {auth.id && <Navigate to="/" />}
-            <h1>Login/Register</h1>
+        <Container>
+        {auth && <Navigate to="/" />}
+            <Typography variant="h1" >Login/Register</Typography>
             <form onSubmit={submit}>
-                <label>
-                    Username: <input
-                                type="text"
-                                value={ username }
-                                onChange={ e => setUsername(e.target.value)}
-                                placeholder='username' />
-                </label>
-                <label>
-                    Password: <input
-                                type="password"
-                                value={ password }
-                                onChange={e => setPassword(e.target.value)}
-                                placeholder='password' />
-                </label>
-                <button value="login" type="submit">Login</button>
-                <button value="register" type="submit">Register</button>
+                <TextField onChange={e => setUsername(e.target.value)} label="Username" />
+                <TextField onChange={e => setPassword(e.target.value)} label="Password" />
+                <Button value="login" type="submit" >Login</Button>
+                <Button value="register" type="submit" >Register</Button>
             </form>
-        </div>
+        </Container>
     )
 }

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { getCart } from "../API";
+import { Container, Grid, Typography } from "@mui/material";
+import Item from "./Item";
 
 export default function Cart() {
 
@@ -13,14 +15,13 @@ export default function Cart() {
     }, [])
 
     return (
-        <div>
-            <h1>Cart:</h1>
-            {cart ? cart.map((i) =>
-            <div>
-                <p>{i.product_id}</p>
-                <p>{i.count}</p>
-            </div>
-            ) : <p>F</p>}
-        </div>
+        <Container>
+            <Typography variant="h1" >Cart:</Typography>
+            {cart ? <Grid container spacing={5}>{
+            cart.map((item, i) =>
+            <Item key={i} itemInfo={item}/>
+            )} </Grid>:
+            null}
+        </Container>
     )
 }

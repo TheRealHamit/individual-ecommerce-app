@@ -54,10 +54,13 @@ export async function attemptLoginWithToken(setAuth) {
         if (response.ok) {
             setAuth(result);
         } else {
-            window.localStorage.removeItem('token');
+         window.localStorage.removeItem('token');
+         setAuth(null);
         }
     } catch (error) {
          console.error(error)
+         window.localStorage.removeItem('token');
+         setAuth(null);
     }
 }
 
@@ -90,7 +93,6 @@ export async function addToCart(product_id, count) {
             body: JSON.stringify({ product_id: product_id, count: count }),
         })
         const result = await response.json()
-        console.log(result)
     } catch (error) {
          console.error(error)
     }
@@ -108,7 +110,6 @@ export async function getCart() {
             }
         })
         const result = await response.json()
-        console.log(result)
         return result;
     } catch (error) {
          console.error(error)
