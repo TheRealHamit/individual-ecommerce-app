@@ -157,6 +157,17 @@ async function createUserProduct({ user_id, product_id, count }) {
     return response.rows[0];
 }
 
+async function deleteUserProduct({ user_id, product_id }) {
+    const SQL = `
+        DELETE FROM user_product
+        WHERE user_id = $1
+        AND product_id = $2
+        RETURNING *;
+    `;
+    const response = await client.query(SQL, [user_id, product_id]);
+    return response.rows[0];
+}
+
 async function fetchUserProducts(user_id) {
     const SQL = `
         SELECT *
@@ -167,9 +178,21 @@ async function fetchUserProducts(user_id) {
     return response.rows;
 }
 
+async function fetchUserProduct({ user_id, product_id }) {
+    const SQL = `
+        SELECT *
+        FROM user_product
+        WHERE user_id = $1
+        AND product_id = $2;
+    `
+    const response = await client.query(SQL, [user_id, product_id]);
+    return response.rows;
+}
+
 module.exports = {
     client,
     createTables, createUser, createCategory, createProduct, createUserProduct,
     fetchUsers, fetchProducts, fetchUserProducts, fetchCategoryByName, fetchCategoryByID,
+    deleteUserProduct,
     authenticate, findUserByToken
 }

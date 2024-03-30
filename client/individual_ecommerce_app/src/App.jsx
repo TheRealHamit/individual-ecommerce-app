@@ -13,8 +13,12 @@ function App() {
 
   useEffect(()=> {
     const token = window.localStorage.getItem('token');
-    if(token){
-      attemptLoginWithToken(setAuth);
+    async function getAuthWithToken() {
+      setAuth(await attemptLoginWithToken());
+    }
+    
+    if (token) {
+      getAuthWithToken();
     }
   }, []);
 
@@ -26,9 +30,9 @@ function App() {
         <Navbar auth={auth} setAuth={setAuth} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
+          <Route path="/products" element={<Products auth={auth} />} />
           <Route path="/login" element={<LoginRegister auth={auth} setAuth={setAuth} />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/cart" element={<Cart auth={auth} />} />
         </Routes>
         {/* {auth.id ? <Logout setAuth={setAuth} /> : null} */}
       </Container>

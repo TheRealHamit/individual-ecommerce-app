@@ -2,6 +2,7 @@ const {
     client,
     createTables, createUser, createCategory, createProduct, createUserProduct,
     fetchUsers, fetchProducts, fetchUserProducts, fetchCategoryByName, fetchCategoryByID,
+    deleteUserProduct,
     authenticate, findUserByToken
 } = require('./db');
 const express = require('express');
@@ -56,12 +57,30 @@ app.get('/api/users', async(req, res, next) => {
 });
 
 app.put('/api/users/:id/cart', isLoggedIn, async(req, res, next) => {
+    //QUESTION: I seem to not need this :id, because the information is already available
+    //          in req.user.id from my isLoggedIn middleware, is there some other syntax
+    //          I should be using? or maybe I should be checking if the URL id and the
+    //          authenticated id are the same? or maybe the :id is a way to say "this
+    //          part can be anything"?
     try {
         const user_product = await {
                             user_id: req.user.id,
                             product_id: req.body.product_id,
                             count: req.body.count }
         res.send(await createUserProduct(user_product));
+    }
+    catch (e) {
+        next(e);
+    }
+});
+
+app.delete('/api/users/:user_id/cart/:id', isLoggedIn, async(req, res, next) => {
+    try {
+        const user_product = {
+            user_id: req.user.id,
+            product_id: req.body.product_id
+        }
+        res.send(await deleteUserProduct(user_product));
     }
     catch (e) {
         next(e);

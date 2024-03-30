@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { login } from "../API";
 import { Navigate } from "react-router-dom";
 import { register } from "../API";
@@ -14,10 +14,11 @@ export default function LoginRegister({ auth, setAuth }) {
         e.preventDefault();
         const submitter = e.nativeEvent.submitter.value;
         const credentials = {username, password};
+
         if (submitter == "login") {
-            login(credentials, setAuth);
+            setAuth(await login(credentials));
         } else {
-            register(credentials, setAuth);
+            setAuth(await register(credentials));
         }
     }
     return (

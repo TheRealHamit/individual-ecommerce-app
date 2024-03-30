@@ -3,7 +3,7 @@ import { getProducts } from "../API";
 import Item from "./Item";
 import { Container, Grid, Typography } from "@mui/material";
 
-export default function Products() {
+export default function Products({ auth }) {
     const [products, setProducts] = useState();
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export default function Products() {
                 Products
             </Typography>
             {products ? <Grid container spacing={5}>{
-            products.map((p, i) => {return <Item key={'Item' + i} itemInfo={p} />})
+            products.map((p, i) => {return <Item key={'Item' + i} auth={auth} itemInfo={p} />})
             }</Grid> : null}
         </Container>
     )

@@ -1,5 +1,5 @@
 
-export async function register(credentials, setAuth) {
+export async function register(credentials) {
     try {
         const response = await fetch('api/auth/register',
         {
@@ -12,14 +12,17 @@ export async function register(credentials, setAuth) {
         const result = await response.json();
         if (response.ok) {
             window.localStorage.setItem('token', result.token);
-            attemptLoginWithToken(setAuth);
+            return attemptLoginWithToken();
+        } else {
+            return null;
         }
     } catch (error) {
          console.error(error)
+         return null;
     }
 }
 
-export async function login(credentials, setAuth) {
+export async function login(credentials) {
     try {
         const response = await fetch('api/auth/login',
         {
@@ -32,14 +35,17 @@ export async function login(credentials, setAuth) {
         const result = await response.json();
         if (response.ok) {
             window.localStorage.setItem('token', result.token);
-            attemptLoginWithToken(setAuth);
+            return attemptLoginWithToken();
+        } else {
+            return null;
         }
     } catch (error) {
          console.error(error);
+         return null;
     }
 }
 
-export async function attemptLoginWithToken(setAuth) {
+export async function attemptLoginWithToken() {
     const token = window.localStorage.getItem('token');
     try {
         const response = await fetch('api/auth/me',
@@ -52,15 +58,15 @@ export async function attemptLoginWithToken(setAuth) {
         })
         const result = await response.json()
         if (response.ok) {
-            setAuth(result);
+            return result;
         } else {
          window.localStorage.removeItem('token');
-         setAuth(null);
+         return result;
         }
     } catch (error) {
          console.error(error)
          window.localStorage.removeItem('token');
-         setAuth(null);
+         return null;
     }
 }
 
@@ -80,10 +86,10 @@ export async function getProducts() {
     }
 }
 
-export async function addToCart(product_id, count) {
+export async function addToCart(user_id, product_id, count) {
     const token = window.localStorage.getItem('token');
     try {
-        const response = await fetch('api/users/1/cart',
+        const response = await fetch(`api/users/${user_id}/cart`,
         {
             method: "PUT",
             headers: {
@@ -93,6 +99,24 @@ export async function addToCart(product_id, count) {
             body: JSON.stringify({ product_id: product_id, count: count }),
         })
         const result = await response.json()
+    } catch (error) {
+         console.error(error)
+    }
+}
+
+export async function removeFromCart(user_id, product_id) {
+    const token = window.localStorage.getItem('token');
+    try {
+        const response = await fetch(`api/users/${user_id}/cart/${product_id}`,
+        {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: token
+            },
+            body: JSON.stringify({ user_id: user_id, product_id: product_id }),
+        })
+        const result = await response.json();
     } catch (error) {
          console.error(error)
     }

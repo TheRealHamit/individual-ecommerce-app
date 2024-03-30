@@ -3,7 +3,7 @@ import { getCart } from "../API";
 import { Container, Grid, Typography } from "@mui/material";
 import Item from "./Item";
 
-export default function Cart() {
+export default function Cart({ auth }) {
 
     const [cart, setCart] = useState(null);
 
@@ -11,7 +11,9 @@ export default function Cart() {
         async function fetchCart() {
             setCart(await getCart());
         }
-        fetchCart();
+        if (auth) {
+            fetchCart();
+        }
     }, [])
 
     return (
@@ -19,7 +21,7 @@ export default function Cart() {
             <Typography variant="h1" >Cart:</Typography>
             {cart ? <Grid container spacing={5}>{
             cart.map((item, i) =>
-            <Item key={i} itemInfo={item}/>
+            <Item key={i} auth={auth} cart={cart} setCart={setCart} itemInfo={item}/>
             )} </Grid>:
             null}
         </Container>

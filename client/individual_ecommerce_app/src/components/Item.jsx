@@ -1,11 +1,16 @@
 import { Button, Card, CardActions, CardContent, Grid, Typography } from "@mui/material";
-import { addToCart } from "../API";
+import { addToCart, removeFromCart } from "../API";
 
-export default function Item({ itemInfo }) {
+export default function Item({ auth, cart, setCart, itemInfo }) {
 
     async function handleClick(e) {
         e.preventDefault();
-        addToCart(itemInfo.id, 1);
+        if (itemInfo.buyable) {
+            addToCart(auth.id, itemInfo.id, 1);
+        } else {
+            removeFromCart(auth.id, itemInfo.product_id);
+            setCart(cart.filter((i) => i.id != itemInfo.id))
+        }
     }
     return (
         <Grid item xs={4}>
@@ -43,7 +48,9 @@ export default function Item({ itemInfo }) {
                     </Typography> : null}
                 </CardContent>
                 <CardActions>
-                    {itemInfo.buyable ? <Button onClick={handleClick} >Add to cart</Button> : null}
+                    {itemInfo.buyable ?
+                    <Button onClick={handleClick} >Add to cart</Button> :
+                    <Button onClick={handleClick} >Remove from cart</Button>}
                 </CardActions>
             </Card>
         </Grid>
