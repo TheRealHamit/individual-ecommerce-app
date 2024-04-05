@@ -6,7 +6,8 @@ export default function Item({ auth, cart, setCart, itemInfo }) {
     async function handleClick(e) {
         e.preventDefault();
         if (itemInfo.buyable) {
-            addToCart(auth.id, itemInfo.id, 1);
+            const result = await addToCart(auth.id, itemInfo.id, 1);
+            setCart([...cart, result]);
         } else {
             removeFromCart(auth.id, itemInfo.product_id);
             setCart(cart.filter((i) => i.id != itemInfo.id))

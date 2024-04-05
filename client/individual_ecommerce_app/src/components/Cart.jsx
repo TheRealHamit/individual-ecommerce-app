@@ -1,20 +1,7 @@
-import { useEffect, useState } from "react"
-import { getCart } from "../API";
 import { Container, Grid, Typography } from "@mui/material";
 import Item from "./Item";
 
-export default function Cart({ auth }) {
-
-    const [cart, setCart] = useState(null);
-
-    useEffect(() => {
-        async function fetchCart() {
-            setCart(await getCart());
-        }
-        if (auth) {
-            fetchCart();
-        }
-    }, [])
+export default function Cart({ auth, cart, setCart }) {
 
     return (
         <Container>

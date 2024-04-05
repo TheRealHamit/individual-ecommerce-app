@@ -98,7 +98,8 @@ export async function addToCart(user_id, product_id, count) {
             },
             body: JSON.stringify({ product_id: product_id, count: count }),
         })
-        const result = await response.json()
+        const result = await response.json();
+        return result;
     } catch (error) {
          console.error(error)
     }
@@ -117,6 +118,7 @@ export async function removeFromCart(user_id, product_id) {
             body: JSON.stringify({ user_id: user_id, product_id: product_id }),
         })
         const result = await response.json();
+        return result;
     } catch (error) {
          console.error(error)
     }
