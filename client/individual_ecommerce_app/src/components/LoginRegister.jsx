@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { login } from "../API";
 import { Navigate } from "react-router-dom";
 import { register } from "../API";
 
 import Button from '@mui/material/Button';
 import { Container, TextField, Typography } from "@mui/material";
+import StateContext from "./StateContext";
 
-export default function LoginRegister({ auth, setAuth }) {
+export default function LoginRegister() {
+    const { auth, setAuth } = useContext(StateContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 

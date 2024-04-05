@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { Tabs, Tab } from "@mui/material";
 import { matchPath, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import StateContext from "./StateContext";
 
-export default function Navbar({ auth, setAuth }) {
+export default function Navbar() {
+  const { auth, setAuth } = useContext(StateContext);
     function useRouteMatch(patterns) {
       const { pathname } = useLocation();
     

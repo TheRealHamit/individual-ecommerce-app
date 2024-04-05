@@ -1,8 +1,10 @@
 import { Button, Card, CardActions, CardContent, Grid, Typography } from "@mui/material";
 import { addToCart, removeFromCart } from "../API";
+import { useContext } from "react";
+import StateContext from "./StateContext";
 
-export default function Item({ auth, cart, setCart, itemInfo }) {
-
+export default function Item({ itemInfo }) {
+    const { auth, cart, setCart } = useContext(StateContext);
     async function handleClick(e) {
         e.preventDefault();
         if (itemInfo.buyable) {
