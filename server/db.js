@@ -25,7 +25,8 @@ const createTables = async() => {
         id UUID PRIMARY KEY,
         name varchar(255) NOT NULL UNIQUE,
         price INT NOT NULL,
-        category_name varchar(255) REFERENCES category(name) NOT NULL
+        category_name varchar(255) REFERENCES category(name) NOT NULL,
+        buyable BOOL NOT NULL DEFAULT TRUE
     );
     CREATE TABLE user_product(
         id UUID PRIMARY KEY,

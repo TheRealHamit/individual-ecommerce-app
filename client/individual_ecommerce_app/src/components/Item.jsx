@@ -17,7 +17,7 @@ export default function Item({ itemInfo }) {
     }
     return (
         <Grid item xs={4}>
-            <Card>
+            <Card style={{width:'max-content'}}>
                 <CardContent sx={{}}>
                     {itemInfo.name ? <Typography variant="h6">
                         Product name:
