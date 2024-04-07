@@ -1,11 +1,10 @@
 
-import { Stack, Container } from "@mui/material";
+import { Box, Stack, Container, Typography } from "@mui/material";
 import Item from "./Item";
 import { useRef } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 
 export default function FeaturedList({ featuredItems }) {
-
     const ref = useRef();
     const { events } = useDraggable(ref, {
         applyRubberBandEffect: true,
@@ -17,10 +16,15 @@ export default function FeaturedList({ featuredItems }) {
         });
     }
     return (
-        <Container style={{ overflow: 'hidden' }}>
-            <Stack ref={ref} {...events} spacing={5} direction="row" sx={{ boxShadow: 25, overflow: 'hidden' }}>
-                {createItems()}
-            </Stack>
-        </Container>
+        <Box>
+            <Typography variant="h1" >
+                Featured Products
+            </Typography>
+            <Container style={{ overflow: 'hidden' }}>
+                <Stack ref={ref} {...events} spacing={5} direction="row" sx={{ boxShadow: 25, overflow: 'hidden' }}>
+                    {createItems()}
+                </Stack>
+            </Container>
+        </Box>
     )
 }

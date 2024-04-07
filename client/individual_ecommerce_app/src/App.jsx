@@ -41,9 +41,12 @@ function App() {
 
     return (
         <>
-            <Container
+            <Container 
                 sx={{
-                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    width: '100%',
+                    height: '90vh',
                 }}
             >
                 <Navbar auth={auth} setAuth={setAuth} />
