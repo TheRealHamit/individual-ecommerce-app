@@ -8,6 +8,7 @@ import { attemptLoginWithToken, getCart, getProducts } from "./API.js";
 import Cart from "./components/Cart.jsx";
 import { Container } from "@mui/material";
 import StateContext from "./components/StateContext.jsx";
+import CookieBanner from "./components/CookieBanner.jsx";
 
 function App() {
     const { auth, setAuth, setCart, setProductList } = useContext(StateContext);
@@ -46,7 +47,7 @@ function App() {
                     display: "flex",
                     flexDirection: "column",
                     width: '100%',
-                    height: '90vh',
+                    height: '100vh'
                 }}
             >
                 <Navbar auth={auth} setAuth={setAuth} />
@@ -56,6 +57,7 @@ function App() {
                     <Route path="/login" element={<LoginRegister />} />
                     <Route path="/cart" element={<Cart />} />
                 </Routes>
+                <CookieBanner />
                 {/* {auth.id ? <Logout setAuth={setAuth} /> : null} */}
             </Container>
         </>

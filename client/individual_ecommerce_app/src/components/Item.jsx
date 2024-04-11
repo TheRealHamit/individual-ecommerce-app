@@ -2,6 +2,8 @@ import { Button, Card, CardActions, CardContent, Grid, Typography } from "@mui/m
 import { addToCart, removeFromCart } from "../API";
 import { useContext } from "react";
 import StateContext from "./StateContext";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 export default function Item({ itemInfo }) {
     const { auth, cart, setCart } = useContext(StateContext);
@@ -52,8 +54,8 @@ export default function Item({ itemInfo }) {
                 </CardContent>
                 <CardActions>
                     {itemInfo.buyable ?
-                    <Button onClick={handleClick} >Add to cart</Button> :
-                    <Button onClick={handleClick} >Remove from cart</Button>}
+                    <Button endIcon={<AddIcon />} onClick={handleClick} >Add to cart</Button> :
+                    <Button endIcon={<RemoveIcon />} onClick={handleClick} >Remove from cart</Button>}
                 </CardActions>
             </Card>
         </Grid>

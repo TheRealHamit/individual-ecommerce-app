@@ -17,7 +17,7 @@ export default function FeaturedList({ featuredItems }) {
     }
     return (
         <Box>
-            <Typography variant="h1" >
+            <Typography variant="h2" >
                 Featured Products
             </Typography>
             <Container style={{ overflow: 'hidden' }}>

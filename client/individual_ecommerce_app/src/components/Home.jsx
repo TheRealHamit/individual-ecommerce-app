@@ -6,7 +6,6 @@ import FeaturedList from "./FeaturedList";
 export default function Home() {
     const { productList } = useContext(StateContext);
     const [featured, setFeatured] = useState([]);
-
     useEffect(() => {
         function getFeatured() {
             const random = productList.sort(() => .5 - Math.random()).slice(0,5);
